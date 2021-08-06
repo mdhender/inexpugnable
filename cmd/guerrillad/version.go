@@ -44,7 +44,7 @@ func init() {
 }
 
 func logVersion() {
-	mainlog.Infof("guerrillad %s", guerrilla.Version)
-	mainlog.Debugf("Build Time: %s", guerrilla.BuildTime)
-	mainlog.Debugf("Commit:     %s", guerrilla.Commit)
+	mainlog.Infof("guerrillad %s", inexpugnable.Version)
+	mainlog.Debugf("Build Time: %s", inexpugnable.BuildTime)
+	mainlog.Debugf("Commit:     %s", inexpugnable.Commit)
 }

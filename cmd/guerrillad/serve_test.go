@@ -424,15 +424,15 @@ func grepTestlog(match string, lineNumber int) (found int, err error) {
 
 // In all the tests, there will be a minimum of about 2000 available
 func TestFileLimit(t *testing.T) {
-	cfg := &guerrilla.AppConfig{LogFile: log.OutputOff.String()}
-	sc := guerrilla.ServerConfig{
+	cfg := &inexpugnable.AppConfig{LogFile: log.OutputOff.String()}
+	sc := inexpugnable.ServerConfig{
 		ListenInterface: "127.0.0.1:2526",
 		IsEnabled:       true,
 		MaxClients:      1000,
 	}
 	cfg.Servers = append(cfg.Servers, sc)
-	d := guerrilla.Daemon{Config: cfg}
-	if ok, maxClients, fileLimit := guerrilla.CheckFileLimit(d.Config); !ok {
+	d := inexpugnable.Daemon{Config: cfg}
+	if ok, maxClients, fileLimit := inexpugnable.CheckFileLimit(d.Config); !ok {
 		t.Errorf("Combined max clients for all servers (%d) is greater than open file limit (%d). "+
 			"Please increase your open file limit. Please check your OS docs for how to increase the limit.", maxClients, fileLimit)
 	}
@@ -504,24 +504,24 @@ func TestCmdConfigChangeEvents(t *testing.T) {
 		t.FailNow()
 	}
 
-	oldconf := &guerrilla.AppConfig{}
+	oldconf := &inexpugnable.AppConfig{}
 	if err := oldconf.Load([]byte(configJsonA)); err != nil {
 		t.Error("configJsonA is invalid", err)
 	}
 
-	newconf := &guerrilla.AppConfig{}
+	newconf := &inexpugnable.AppConfig{}
 	if err := newconf.Load([]byte(configJsonB)); err != nil {
 		t.Error("configJsonB is invalid", err)
 	}
 
-	newerconf := &guerrilla.AppConfig{}
+	newerconf := &inexpugnable.AppConfig{}
 	if err := newerconf.Load([]byte(configJsonC)); err != nil {
 		t.Error("configJsonC is invalid", err)
 	}
 
-	expectedEvents := map[guerrilla.Event]bool{
-		guerrilla.EventConfigBackendConfig: false,
-		guerrilla.EventConfigServerNew:     false,
+	expectedEvents := map[inexpugnable.Event]bool{
+		inexpugnable.EventConfigBackendConfig: false,
+		inexpugnable.EventConfigServerNew:     false,
 	}
 	mainlog, err = getTestLog()
 	if err != nil {
@@ -531,24 +531,24 @@ func TestCmdConfigChangeEvents(t *testing.T) {
 
 	bcfg := backends.BackendConfig{"log_received_mails": true}
 	backend, err := backends.New(bcfg, mainlog)
-	app, err := guerrilla.New(oldconf, backend, mainlog)
+	app, err := inexpugnable.New(oldconf, backend, mainlog)
 	if err != nil {
 		t.Error("Failed to create new app", err)
 	}
-	toUnsubscribe := map[guerrilla.Event]func(c *guerrilla.AppConfig){}
-	toUnsubscribeS := map[guerrilla.Event]func(c *guerrilla.ServerConfig){}
+	toUnsubscribe := map[inexpugnable.Event]func(c *inexpugnable.AppConfig){}
+	toUnsubscribeS := map[inexpugnable.Event]func(c *inexpugnable.ServerConfig){}
 
 	for event := range expectedEvents {
 		// Put in anon func since range is overwriting event
-		func(e guerrilla.Event) {
+		func(e inexpugnable.Event) {
 			if strings.Index(e.String(), "server_change") == 0 {
-				f := func(c *guerrilla.ServerConfig) {
+				f := func(c *inexpugnable.ServerConfig) {
 					expectedEvents[e] = true
 				}
 				_ = app.Subscribe(e, f)
 				toUnsubscribeS[e] = f
 			} else {
-				f := func(c *guerrilla.AppConfig) {
+				f := func(c *inexpugnable.AppConfig) {
 					expectedEvents[e] = true
 				}
 				_ = app.Subscribe(e, f)
@@ -685,7 +685,7 @@ func TestServerAddEvent(t *testing.T) {
 	}
 
 	// now change the config by adding a server
-	conf := &guerrilla.AppConfig{}       // blank one
+	conf := &inexpugnable.AppConfig{}    // blank one
 	err = conf.Load([]byte(configJsonA)) // load configJsonA
 	if err != nil {
 		t.Error(err)
@@ -764,7 +764,7 @@ func TestServerStartEvent(t *testing.T) {
 		t.Error("server didn't start")
 	}
 	// now change the config by adding a server
-	conf := &guerrilla.AppConfig{}                        // blank one
+	conf := &inexpugnable.AppConfig{}                     // blank one
 	if err = conf.Load([]byte(configJsonA)); err != nil { // load configJsonA
 		t.Error(err)
 	}
@@ -845,7 +845,7 @@ func TestServerStopEvent(t *testing.T) {
 		t.Error("server didn't start")
 	}
 	// now change the config by enabling a server
-	conf := &guerrilla.AppConfig{}                        // blank one
+	conf := &inexpugnable.AppConfig{}                     // blank one
 	if err = conf.Load([]byte(configJsonA)); err != nil { // load configJsonA
 		t.Error(err)
 	}
@@ -916,7 +916,7 @@ func TestServerStopEvent(t *testing.T) {
 func TestDebug(t *testing.T) {
 
 	t.SkipNow()
-	conf := guerrilla.ServerConfig{ListenInterface: "127.0.0.1:2526"}
+	conf := inexpugnable.ServerConfig{ListenInterface: "127.0.0.1:2526"}
 	if conn, buffin, err := test.Connect(conf, 20); err != nil {
 		t.Error("Could not connect to new server", conf.ListenInterface, err)
 	} else {
@@ -963,7 +963,7 @@ func TestAllowedHostsEvent(t *testing.T) {
 	}
 	// start the server by emulating the serve command
 
-	conf := &guerrilla.AppConfig{}                        // blank one
+	conf := &inexpugnable.AppConfig{}                     // blank one
 	if err = conf.Load([]byte(configJsonD)); err != nil { // load configJsonD
 		t.Error(err)
 	}
@@ -1070,7 +1070,7 @@ func TestTLSConfigEvent(t *testing.T) {
 		t.Error(err)
 		t.FailNow()
 	}
-	conf := &guerrilla.AppConfig{}                        // blank one
+	conf := &inexpugnable.AppConfig{}                     // blank one
 	if err = conf.Load([]byte(configJsonD)); err != nil { // load configJsonD
 		t.Error(err)
 		t.FailNow()
@@ -1202,7 +1202,7 @@ func TestBadTLSStart(t *testing.T) {
 		if err = ioutil.WriteFile("configJsonD.json", []byte(configJsonD), 0644); err != nil {
 			t.Error(err)
 		}
-		conf := &guerrilla.AppConfig{}                        // blank one
+		conf := &inexpugnable.AppConfig{}                     // blank one
 		if err = conf.Load([]byte(configJsonD)); err != nil { // load configJsonD
 			t.Error(err)
 		}
@@ -1259,7 +1259,7 @@ func TestBadTLSReload(t *testing.T) {
 		t.Error(err)
 		t.FailNow()
 	}
-	conf := &guerrilla.AppConfig{}                        // blank one
+	conf := &inexpugnable.AppConfig{}                     // blank one
 	if err = conf.Load([]byte(configJsonD)); err != nil { // load configJsonD
 		t.Error(err)
 		t.FailNow()
@@ -1356,7 +1356,7 @@ func TestSetTimeoutEvent(t *testing.T) {
 	if err = ioutil.WriteFile("configJsonD.json", []byte(configJsonD), 0644); err != nil {
 		t.Error(err)
 	}
-	conf := &guerrilla.AppConfig{}                        // blank one
+	conf := &inexpugnable.AppConfig{}                     // blank one
 	if err = conf.Load([]byte(configJsonD)); err != nil { // load configJsonD
 		t.Error(err)
 	}
@@ -1448,7 +1448,7 @@ func TestDebugLevelChange(t *testing.T) {
 	if err = ioutil.WriteFile("configJsonD.json", []byte(configJsonD), 0644); err != nil {
 		t.Error(err)
 	}
-	conf := &guerrilla.AppConfig{}                        // blank one
+	conf := &inexpugnable.AppConfig{}                     // blank one
 	if err = conf.Load([]byte(configJsonD)); err != nil { // load configJsonD
 		t.Error(err)
 	}

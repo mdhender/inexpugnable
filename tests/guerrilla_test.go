@@ -64,7 +64,7 @@ import (
 )
 
 type TestConfig struct {
-	guerrilla.AppConfig
+	inexpugnable.AppConfig
 	BackendConfig map[string]interface{} `json:"backend_config"`
 }
 
@@ -73,7 +73,7 @@ var (
 	// app config loaded here
 	config *TestConfig
 
-	app guerrilla.Guerrilla
+	app inexpugnable.Guerrilla
 
 	initErr error
 
@@ -92,7 +92,7 @@ func init() {
 			return
 		}
 		backend, _ := getBackend(config.BackendConfig, logger)
-		app, initErr = guerrilla.New(&config.AppConfig, backend, logger)
+		app, initErr = inexpugnable.New(&config.AppConfig, backend, logger)
 	}
 
 }
@@ -1010,7 +1010,7 @@ func TestCommandLineMaxLength(t *testing.T) {
 				t.Error("Hello command failed", err.Error())
 			}
 			// repeat > 1024 characters
-			response, err := Command(conn, bufin, strings.Repeat("s", guerrilla.CommandLineMaxLength+1))
+			response, err := Command(conn, bufin, strings.Repeat("s", inexpugnable.CommandLineMaxLength+1))
 			if err != nil {
 				t.Error("command failed", err.Error())
 			}

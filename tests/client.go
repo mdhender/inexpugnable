@@ -34,7 +34,7 @@ import (
 	"time"
 )
 
-func Connect(serverConfig guerrilla.ServerConfig, deadline time.Duration) (net.Conn, *bufio.Reader, error) {
+func Connect(serverConfig inexpugnable.ServerConfig, deadline time.Duration) (net.Conn, *bufio.Reader, error) {
 	var bufin *bufio.Reader
 	var conn net.Conn
 	var err error

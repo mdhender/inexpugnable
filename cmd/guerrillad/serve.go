@@ -63,7 +63,7 @@ var (
 	signalChannel = make(chan os.Signal, 1) // for trapping SIGHUP and friends
 	mainlog       log.Logger
 
-	d guerrilla.Daemon
+	d inexpugnable.Daemon
 )
 
 func init() {
@@ -128,7 +128,7 @@ func sigHandler() {
 
 func serve(cmd *cobra.Command, args []string) {
 	logVersion()
-	d = guerrilla.Daemon{Logger: mainlog}
+	d = inexpugnable.Daemon{Logger: mainlog}
 	c, err := readConfig(configPath, pidFile)
 	if err != nil {
 		mainlog.WithError(err).Fatal("Error while reading config")
@@ -136,7 +136,7 @@ func serve(cmd *cobra.Command, args []string) {
 	_ = d.SetConfig(*c)
 
 	// Check that max clients is not greater than system open file limit.
-	if ok, maxClients, fileLimit := guerrilla.CheckFileLimit(c); !ok {
+	if ok, maxClients, fileLimit := inexpugnable.CheckFileLimit(c); !ok {
 		mainlog.Fatalf("Combined max clients for all servers (%d) is greater than open file limit (%d). "+
 			"Please increase your open file limit or decrease max clients.", maxClients, fileLimit)
 	}
@@ -151,7 +151,7 @@ func serve(cmd *cobra.Command, args []string) {
 }
 
 // ReadConfig is called at startup, or when a SIG_HUP is caught
-func readConfig(path string, pidFile string) (*guerrilla.AppConfig, error) {
+func readConfig(path string, pidFile string) (*inexpugnable.AppConfig, error) {
 	// Load in the config.
 	// Note here is the only place we can make an exception to the
 	// "treat config values as immutable". For example, here the
