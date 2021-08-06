@@ -26,28 +26,22 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
-
 	"github.com/mdhender/inexpugnable"
+	"github.com/mdhender/inexpugnable/internal/oscompat"
 	"github.com/mdhender/inexpugnable/log"
+	"github.com/spf13/cobra"
+	"os"
 
-	// enable the Redis redigo driver
-	_ "github.com/mdhender/inexpugnable/backends/storage/redigo"
-
-	// Choose iconv or mail/encoding package which uses golang.org/x/net/html/charset
+	// Choose the character encoding package to use.
+	// Choices are iconv or mail/encoding package which uses golang.org/x/net/html/charset
 	//_ "github.com/mdhender/inexpugnable/mail/iconv"
 	_ "github.com/mdhender/inexpugnable/mail/encoding"
 
-	"github.com/spf13/cobra"
-
+	// enable the mysql driver
 	_ "github.com/go-sql-driver/mysql"
-)
 
-const (
-	defaultPidFile = "/var/run/go-guerrilla.pid"
+	// enable the Redis redigo driver
+	_ "github.com/mdhender/inexpugnable/backends/storage/redigo"
 )
 
 var (
@@ -86,44 +80,9 @@ func init() {
 }
 
 func sigHandler() {
-	signal.Notify(signalChannel,
-		syscall.SIGHUP,
-		syscall.SIGTERM,
-		syscall.SIGQUIT,
-		syscall.SIGINT,
-		syscall.SIGKILL,
-		syscall.SIGUSR1,
-		os.Kill,
-	)
-	for sig := range signalChannel {
-		if sig == syscall.SIGHUP {
-			if ac, err := readConfig(configPath, pidFile); err == nil {
-				_ = d.ReloadConfig(*ac)
-			} else {
-				mainlog.WithError(err).Error("Could not reload config")
-			}
-		} else if sig == syscall.SIGUSR1 {
-			if err := d.ReopenLogs(); err != nil {
-				mainlog.WithError(err).Error("reopening logs failed")
-			}
-		} else if sig == syscall.SIGTERM || sig == syscall.SIGQUIT || sig == syscall.SIGINT || sig == os.Kill {
-			mainlog.Infof("Shutdown signal caught")
-			go func() {
-				select {
-				// exit if graceful shutdown not finished in 60 sec.
-				case <-time.After(time.Second * 60):
-					mainlog.Error("graceful shutdown timed out")
-					os.Exit(1)
-				}
-			}()
-			d.Shutdown()
-			mainlog.Infof("Shutdown completed, exiting.")
-			return
-		} else {
-			mainlog.Infof("Shutdown, unknown signal caught")
-			return
-		}
-	}
+	oscompat.SignalHandler(signalChannel, d, mainlog, func() (*inexpugnable.AppConfig, error) {
+		return readConfig(configPath, pidFile)
+	})
 }
 
 func serve(cmd *cobra.Command, args []string) {
@@ -164,7 +123,7 @@ func readConfig(path string, pidFile string) (*inexpugnable.AppConfig, error) {
 	if len(pidFile) > 0 {
 		appConfig.PidFile = pidFile
 	} else if len(appConfig.PidFile) == 0 {
-		appConfig.PidFile = defaultPidFile
+		appConfig.PidFile = oscompat.DefaultPidFile()
 	}
 	if verbose {
 		appConfig.LogLevel = "debug"
