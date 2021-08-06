@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/flashmob/go-guerrilla/backends"
-	"github.com/flashmob/go-guerrilla/log"
+	"github.com/mdhender/inexpugnable/backends"
+	"github.com/mdhender/inexpugnable/log"
 	"io/ioutil"
 	"time"
 )

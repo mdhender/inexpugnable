@@ -10,9 +10,9 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/flashmob/go-guerrilla/log"
-	"github.com/flashmob/go-guerrilla/mail"
-	"github.com/flashmob/go-guerrilla/response"
+	"github.com/mdhender/inexpugnable/log"
+	"github.com/mdhender/inexpugnable/mail"
+	"github.com/mdhender/inexpugnable/response"
 )
 
 var ErrProcessorNotFound error

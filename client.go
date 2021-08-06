@@ -11,10 +11,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/flashmob/go-guerrilla/log"
-	"github.com/flashmob/go-guerrilla/mail"
-	"github.com/flashmob/go-guerrilla/mail/rfc5321"
-	"github.com/flashmob/go-guerrilla/response"
+	"github.com/mdhender/inexpugnable/log"
+	"github.com/mdhender/inexpugnable/mail"
+	"github.com/mdhender/inexpugnable/mail/rfc5321"
+	"github.com/mdhender/inexpugnable/response"
 )
 
 // ClientState indicates which part of the SMTP transaction a given client is in.

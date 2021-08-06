@@ -7,15 +7,15 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/flashmob/go-guerrilla"
-	"github.com/flashmob/go-guerrilla/log"
+	"github.com/mdhender/inexpugnable"
+	"github.com/mdhender/inexpugnable/log"
 
 	// enable the Redis redigo driver
-	_ "github.com/flashmob/go-guerrilla/backends/storage/redigo"
+	_ "github.com/mdhender/inexpugnable/backends/storage/redigo"
 
 	// Choose iconv or mail/encoding package which uses golang.org/x/net/html/charset
-	//_ "github.com/flashmob/go-guerrilla/mail/iconv"
-	_ "github.com/flashmob/go-guerrilla/mail/encoding"
+	//_ "github.com/mdhender/inexpugnable/mail/iconv"
+	_ "github.com/mdhender/inexpugnable/mail/encoding"
 
 	"github.com/spf13/cobra"
 

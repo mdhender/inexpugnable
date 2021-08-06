@@ -3,8 +3,8 @@ package backends
 import (
 	"fmt"
 
-	"github.com/flashmob/go-guerrilla/mail"
-	"github.com/flashmob/go-guerrilla/response"
+	"github.com/mdhender/inexpugnable/mail"
+	"github.com/mdhender/inexpugnable/response"
 )
 
 // ----------------------------------------------------------------------------------

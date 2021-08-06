@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/flashmob/go-guerrilla/mail"
+	"github.com/mdhender/inexpugnable/mail"
 	ico "gopkg.in/iconv.v1"
 )
 
