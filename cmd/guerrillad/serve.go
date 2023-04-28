@@ -47,9 +47,9 @@ func init() {
 	if err != nil && mainlog != nil {
 		mainlog.WithError(err).Errorf("Failed creating a logger to %s", log.OutputStderr)
 	}
-	cfgFile := "goguerrilla.conf" // deprecated default name
+	cfgFile := "inexpugnable.conf.json" // default name
 	if _, err := os.Stat(cfgFile); err != nil {
-		cfgFile = "goguerrilla.conf.json" // use the new name
+		cfgFile = "inexpugnable.conf.json" // use the new name
 	}
 	serveCmd.PersistentFlags().StringVarP(&configPath, "config", "c",
 		cfgFile, "Path to the configuration file")
