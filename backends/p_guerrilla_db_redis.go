@@ -19,7 +19,9 @@ import (
 // Processor Name: GuerrillaRedisDB
 // ----------------------------------------------------------------------------------
 // Description   : Saves the body to redis, meta data to SQL. Example only.
-//               : Limitation: it doesn't save multiple recipients or validate them
+//
+//	: Limitation: it doesn't save multiple recipients or validate them
+//
 // ----------------------------------------------------------------------------------
 // Config Options: ...
 // --------------:-------------------------------------------------------------------

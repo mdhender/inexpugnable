@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 /*******************************************************************************
@@ -38,7 +39,9 @@ import (
 
 // SignalHandler captures and manages SIGHUP and friends.
 // It expects signalChannel to be a buffered channel. For example:
-//   signalChannel := make(chan os.Signal, 1)
+//
+//	signalChannel := make(chan os.Signal, 1)
+//
 // Warning: Windows does not have SIGUSR1, so there is no way to reset log files
 func SignalHandler(signalChannel chan os.Signal, d inexpugnable.Daemon, mainlog log.Logger, readConfig func() (*inexpugnable.AppConfig, error)) {
 	signal.Notify(signalChannel,

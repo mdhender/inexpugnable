@@ -366,7 +366,6 @@ var grepNotFound error
 // error otherwise
 //
 // It will attempt to search the log multiple times, pausing loner for each re-try
-//
 func grepTestlog(match string, lineNumber int) (found int, err error) {
 	found = 0
 	fd, err := os.Open("../../tests/testlog")

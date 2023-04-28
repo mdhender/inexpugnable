@@ -135,7 +135,7 @@ func (s *Parser) forwardPath() (err error) {
 	return err // it may return atExpected
 }
 
-//MailFrom accepts the following syntax: Reverse-path [SP Mail-parameters] CRLF
+// MailFrom accepts the following syntax: Reverse-path [SP Mail-parameters] CRLF
 func (s *Parser) MailFrom(input []byte) (err error) {
 	s.set(input)
 	if err := s.reversePath(); err != nil {
@@ -157,8 +157,9 @@ func (s *Parser) MailFrom(input []byte) (err error) {
 
 const postmasterLocalPart = "postmaster"
 
-//RcptTo accepts the following syntax: ( "<Postmaster@" Domain ">" / "<Postmaster>" /
-//                  Forward-path ) [SP Rcpt-parameters] CRLF
+// RcptTo accepts the following syntax: ( "<Postmaster@" Domain ">" / "<Postmaster>" /
+//
+//	Forward-path ) [SP Rcpt-parameters] CRLF
 func (s *Parser) RcptTo(input []byte) (err error) {
 	s.set(input)
 	if err := s.forwardPath(); err != nil {
@@ -378,8 +379,9 @@ func (s *Parser) mailbox() error {
 }
 
 // "[" ( IPv4-address-literal /
-//                    IPv6-address-literal /
-//                    General-address-literal ) "]"
+//
+//	IPv6-address-literal /
+//	General-address-literal ) "]"
 func (s *Parser) addressLiteral() error {
 	ch := s.next()
 	if ch == '[' {
@@ -459,7 +461,7 @@ func (s *Parser) snum() error {
 	return errors.New("too many digits")
 }
 
-//IPv6:" IPv6-addr
+// IPv6:" IPv6-addr
 func (s *Parser) ipv6AddressLiteral() error {
 	var ip bytes.Buffer
 	for c := s.next(); ; c = s.next() {
@@ -552,7 +554,7 @@ func (s *Parser) QcontentSMTP() error {
 	}
 }
 
-//Dot-string     = Atom *("."  Atom)
+// Dot-string     = Atom *("."  Atom)
 func (s *Parser) dotString() error {
 	for {
 		if err := s.atom(); err != nil {
@@ -637,7 +639,7 @@ func isLetDig(c byte) bool {
 	return false
 }
 
-//ehlo = "EHLO" SP ( Domain / address-literal ) CRLF
+// ehlo = "EHLO" SP ( Domain / address-literal ) CRLF
 // Note: "HELO" is ignored here
 func (s *Parser) Ehlo(input []byte) (domain string, ip net.IP, err error) {
 	s.set(input)

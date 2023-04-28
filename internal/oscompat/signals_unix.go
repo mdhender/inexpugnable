@@ -1,3 +1,4 @@
+//go:build amd64 && linux
 // +build amd64,linux
 
 /*******************************************************************************
@@ -39,7 +40,8 @@ import (
 
 // SignalHandler captures and manages SIGHUP and friends.
 // It expects signalChannel to be a buffered channel. For example:
-//   signalChannel := make(chan os.Signal, 1)
+//
+//	signalChannel := make(chan os.Signal, 1)
 func SignalHandler(signalChannel chan os.Signal, d inexpugnable.Daemon, mainlog log.Logger, readConfig func() (*inexpugnable.AppConfig, error)) {
 	signal.Notify(signalChannel,
 		unix.SIGHUP,

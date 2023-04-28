@@ -18,9 +18,11 @@ type HeaderConfig struct {
 // Config Options: none
 // --------------:-------------------------------------------------------------------
 // Input         : e.Helo
-//               : e.RemoteAddress
-//               : e.RcptTo
-//               : e.Hashes
+//
+//	: e.RemoteAddress
+//	: e.RcptTo
+//	: e.Hashes
+//
 // ----------------------------------------------------------------------------------
 // Output        : Sets e.DeliveryHeader with additional delivery info
 // ----------------------------------------------------------------------------------

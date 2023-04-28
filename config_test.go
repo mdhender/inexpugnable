@@ -37,7 +37,6 @@ import (
 
 // a configuration file with a dummy backend
 
-//
 var configJsonA = `
 {
     "log_file" : "./tests/testlog",
