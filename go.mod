@@ -1,6 +1,6 @@
 module github.com/mdhender/inexpugnable
 
-go 1.16
+go 1.20
 
 require (
 	github.com/asaskevich/EventBus v0.0.0-20200907212545-49d423059eef
@@ -11,4 +11,10 @@ require (
 	golang.org/x/net v0.7.0
 	golang.org/x/sys v0.5.0
 	gopkg.in/iconv.v1 v1.1.1
+)
+
+require (
+	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
+	golang.org/x/text v0.7.0 // indirect
 )
